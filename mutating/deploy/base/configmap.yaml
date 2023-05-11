@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  mac-mutate-cm
+data:
+  config.yaml: |
+    namespaces: 
+      - default
+      - test
+    image-mapping:
+      - image: ndots
+        value: 3
+    nodeSelector:
+      - name: kubernetes.io/arch
+        value: amd64
+      - name: node.openshift.io/os_id 
+        value: rhcos

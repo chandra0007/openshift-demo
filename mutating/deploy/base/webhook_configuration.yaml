@@ -1,0 +1,23 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: mac-mutate-webhook-cfg
+  labels:
+    app: mac-mutate
+webhooks:
+  - name: mac-mutate-webhook
+    admissionReviewVersions: [v1beta1, v1]
+    sideEffects: NoneOnDryRun
+    clientConfig:
+      service:
+        name: mac-mutate-webhook-svc
+        namespace: mac-mutate
+        path: "/mutate"
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+    namespaceSelector:
+      matchLabels:
+        mac-mutate: enabled

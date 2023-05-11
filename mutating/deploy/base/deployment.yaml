@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  mac-mutate-dep
+  labels:
+    app: mac-mutate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mac-mutate
+  template:
+    metadata:
+      labels:
+        app: mac-mutate
+    spec:
+      containers:
+        - name: mac-mutate
+          image: quay.io/pbastide_rh/openshift-demo:mac-mutate-latest
+          imagePullPolicy: Always
+          args:
+            - -cfg-file=/etc/mac-mutate/config.yaml
+            - -v=10
+            - 2>&1
+          volumeMounts:
+            - name: mac-mutate-config
+              mountPath: /etc/mac-mutate/
+              readOnly: true
+      volumes:
+        - name: mac-mutate-config
+          configMap:
+            name: mac-mutate-cm
+      priorityClassName: system-cluster-critical
