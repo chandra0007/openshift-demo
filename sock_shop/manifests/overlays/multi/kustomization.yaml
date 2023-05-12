@@ -3,5 +3,9 @@ kind: Kustomization
 metadata:
   name: sock-shop
 namespace: sock-shop
+
+sortOptions:
+  order: fifo
+
 resources:
 - ../../base

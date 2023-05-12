@@ -21,11 +21,32 @@ spec:
           image: weaveworksdemos/catalogue-db:0.3.0
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: fake_password
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds
+                  key: username
             - name: MYSQL_DATABASE
-              value: socksdb
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-creds
+                  key: password
           ports:
             - name: mysql
               containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: catalogue-data
+          securityContext:
+            privileged: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: catalogue-data
+          emptyDir:
+            medium: Memory
       nodeSelector:
-        kubernetes.io/os: linux
+        kubernetes.io/arch: amd64
+        node.openshift.io/os_id: rhcos

@@ -19,6 +19,8 @@ spec:
       containers:
         - name: queue-master
           image: weaveworksdemos/queue-master:0.3.1
+          command: [ "/usr/local/bin/java.sh" ]
+          args: [ "-jar", "./app.jar", "--port=8080" ]
           env:
             - name: JAVA_OPTS
               value: -Xms64m -Xmx128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false
@@ -30,6 +32,6 @@ spec:
               cpu: 100m
               memory: 300Mi
           ports:
-            - containerPort: 80
+            - containerPort: 8080
       nodeSelector:
-        kubernetes.io/os: linux
+        node.openshift.io/os_id: rhcos

@@ -19,7 +19,7 @@ spec:
       containers:
         - name: catalogue
           image: weaveworksdemos/catalogue:0.3.5
-          command: ["/app"]
+          command: [ "/app" ]
           args:
             - -port=80
           resources:
@@ -33,7 +33,7 @@ spec:
             - containerPort: 80
           securityContext:
             runAsNonRoot: true
-            runAsUser: 10001
+            #   runAsUser: 10001
             capabilities:
               drop:
                 - all
@@ -53,4 +53,4 @@ spec:
             initialDelaySeconds: 180
             periodSeconds: 3
       nodeSelector:
-        kubernetes.io/os: linux
+        node.openshift.io/os_id: rhcos

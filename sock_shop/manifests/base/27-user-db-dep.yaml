@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,25 +18,22 @@ spec:
       containers:
         - name: user-db
           image: weaveworksdemos/user-db:0.3.0
-
           ports:
             - name: mongo
               containerPort: 27017
           securityContext:
-            capabilities:
-              drop:
-                - all
-              add:
-                - CHOWN
-                - SETGID
-                - SETUID
             readOnlyRootFilesystem: true
           volumeMounts:
             - mountPath: /tmp
-              name: tmp-volume
+              name: users-db-temp-vol
+            - mountPath: /data/db-users
+              name: users-db-vol
       volumes:
-        - name: tmp-volume
+        - name: users-db-vol
           emptyDir:
             medium: Memory
+        - name: users-db-temp-vol
+          persistentVolumeClaim:
+            claimName: user-db-temp-pvc
       nodeSelector:
-        kubernetes.io/os: linux
+        node.openshift.io/os_id: rhcos

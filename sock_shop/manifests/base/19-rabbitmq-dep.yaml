@@ -27,19 +27,13 @@ spec:
             - containerPort: 5672
               name: rabbitmq
           securityContext:
-            capabilities:
-              drop:
-                - all
-              add:
-                - CHOWN
-                - SETGID
-                - SETUID
-                - DAC_OVERRIDE
-            readOnlyRootFilesystem: true
+#            capabilities:
+#              add: # https://unofficial-kubernetes.readthedocs.io/en/latest/concepts/policy/container-capabilities/
+            readOnlyRootFilesystem: false
         - name: rabbitmq-exporter
           image: kbudde/rabbitmq-exporter
           ports:
             - containerPort: 9090
               name: exporter
       nodeSelector:
-        kubernetes.io/os: linux
+        node.openshift.io/os_id: rhcos

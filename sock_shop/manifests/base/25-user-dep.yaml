@@ -27,30 +27,26 @@ spec:
               cpu: 100m
               memory: 100Mi
           ports:
-            - containerPort: 80
+            - containerPort: 8080
+          command: [ "/user" ]
+          args: [ "-port=8080" ]
           env:
             - name: mongo
               value: user-db:27017
           securityContext:
             runAsNonRoot: true
-            runAsUser: 10001
-            capabilities:
-              drop:
-                - all
-              add:
-                - NET_BIND_SERVICE
             readOnlyRootFilesystem: true
           livenessProbe:
             httpGet:
               path: /health
-              port: 80
+              port: 8080
             initialDelaySeconds: 300
             periodSeconds: 3
           readinessProbe:
             httpGet:
               path: /health
-              port: 80
+              port: 8080
             initialDelaySeconds: 180
             periodSeconds: 3
       nodeSelector:
-        kubernetes.io/os: linux
+        node.openshift.io/os_id: rhcos

@@ -19,6 +19,8 @@ spec:
       containers:
         - name: shipping
           image: weaveworksdemos/shipping:0.4.8
+          command: [ "/usr/local/bin/java.sh" ]
+          args: [ "-jar", "./app.jar", "--port=8080" ]
           env:
             - name: ZIPKIN
               value: zipkin.jaeger.svc.cluster.local
@@ -32,10 +34,10 @@ spec:
               cpu: 100m
               memory: 300Mi
           ports:
-            - containerPort: 80
+            - containerPort: 8080
           securityContext:
             runAsNonRoot: true
-            runAsUser: 10001
+            # runAsUser: 10001
             capabilities:
               drop:
                 - all
@@ -50,4 +52,4 @@ spec:
           emptyDir:
             medium: Memory
       nodeSelector:
-        kubernetes.io/os: linux
+        node.openshift.io/os_id: rhcos

@@ -28,10 +28,6 @@ spec:
             capabilities:
               drop:
                 - all
-              add:
-                - CHOWN
-                - SETGID
-                - SETUID
             readOnlyRootFilesystem: true
       nodeSelector:
-        kubernetes.io/os: linux
+        node.openshift.io/os_id: rhcos
