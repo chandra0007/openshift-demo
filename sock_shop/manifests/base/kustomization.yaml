@@ -25,7 +25,6 @@ resources:
   - 10-front-end-svc.yaml
   - 11-orders-dep.yaml
   - 12-orders-svc.yaml
-  - 13-orders-db-pvc.yaml
   - 13-orders-db-temp-pvc.yaml
   - 13-orders-db-dep.yaml
   - 14-orders-db-svc.yaml

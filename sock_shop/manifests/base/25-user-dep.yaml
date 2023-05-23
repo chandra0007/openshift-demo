@@ -35,7 +35,7 @@ spec:
               value: user-db:27017
           securityContext:
             runAsNonRoot: true
-            readOnlyRootFilesystem: true
+            privileged: true
           livenessProbe:
             httpGet:
               path: /health
