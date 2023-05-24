@@ -19,6 +19,7 @@ spec:
       containers:
         - name: catalogue-db
           image: weaveworksdemos/catalogue-db:0.3.0
+          imagePullPolicy: IfNotPresent
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:

@@ -21,6 +21,7 @@ spec:
       containers:
         - name: session-db
           image: redis:alpine
+          imagePullPolicy: IfNotPresent
           ports:
             - name: redis
               containerPort: 6379

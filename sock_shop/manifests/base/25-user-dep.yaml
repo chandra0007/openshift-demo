@@ -19,6 +19,7 @@ spec:
       containers:
         - name: user
           image: weaveworksdemos/user:0.4.7
+          imagePullPolicy: IfNotPresent
           resources:
             limits:
               cpu: 300m

@@ -18,6 +18,7 @@ spec:
       containers:
         - name: orders-db
           image: mongo
+          imagePullPolicy: IfNotPresent
           ports:
             - name: mongo
               containerPort: 27017

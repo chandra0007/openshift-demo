@@ -19,6 +19,7 @@ spec:
       containers:
         - name: shipping
           image: weaveworksdemos/shipping:0.4.8
+          imagePullPolicy: IfNotPresent
           command: [ "/usr/local/bin/java.sh" ]
           args: [ "-jar", "./app.jar", "--port=8080" ]
           env:

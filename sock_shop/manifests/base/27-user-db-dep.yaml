@@ -18,6 +18,7 @@ spec:
       containers:
         - name: user-db
           image: weaveworksdemos/user-db:0.3.0
+          imagePullPolicy: IfNotPresent
           ports:
             - name: mongo
               containerPort: 27017

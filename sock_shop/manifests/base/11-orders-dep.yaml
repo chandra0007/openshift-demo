@@ -19,6 +19,7 @@ spec:
       containers:
         - name: orders
           image: weaveworksdemos/orders:0.4.7
+          imagePullPolicy: IfNotPresent
           command: [ "/usr/local/bin/java.sh" ]
           args: [ "-jar", "./app.jar", "--port=8080" ]
           env:
