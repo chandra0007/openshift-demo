@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: rabbitmq
-          image: rabbitmq:3.6.8-management
+          image: rabbitmq:3.11.19-management
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 15672
@@ -28,13 +28,13 @@ spec:
             - containerPort: 5672
               name: rabbitmq
           securityContext:
-#            capabilities:
-#              add: # https://unofficial-kubernetes.readthedocs.io/en/latest/concepts/policy/container-capabilities/
             readOnlyRootFilesystem: false
         - name: rabbitmq-exporter
           image: kbudde/rabbitmq-exporter
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9090
               name: exporter
       nodeSelector:
         node.openshift.io/os_id: rhcos
+        kubernetes.io/arch: amd64

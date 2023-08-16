@@ -1,11 +1,17 @@
-FROM registry.access.redhat.com/ubi8/nodejs-16:1-98.1682303932 as builder
+FROM registry.access.redhat.com/ubi9/nodejs-18:latest as builder
 USER 0
 RUN dnf update -y
+
+# Original was https://github.com/microservices-demo/front-end
+
 RUN mkdir -p /src/ \
     && cd /src/ \
-    && git clone https://github.com/microservices-demo/front-end
+    && git clone https://github.com/prb112/sock-shop-front-end \
+    && ls -al \
+    && mv sock-shop-front-end front-end \
+    && echo $(date)
 
-FROM registry.access.redhat.com/ubi8/nodejs-16:1-98.1682303932
+FROM registry.access.redhat.com/ubi9/nodejs-18:latest
 ENV NODE_ENV "production"
 ENV PORT 8079
 EXPOSE 8079
@@ -17,7 +23,7 @@ ENV	SERVICE_USER=myuser \
 
 USER 0
 RUN dnf update -y \
-    && dnf install -y nc tzdata openssl curl ca-certificates fontconfig glibc-langpack-en gzip tar findutils shadow-utils \
+    && dnf install -y nc tzdata openssl ca-certificates fontconfig glibc-langpack-en gzip tar findutils shadow-utils \
     && groupadd -r -g ${SERVICE_GID} ${SERVICE_GROUP} \
     && useradd -r -u ${SERVICE_UID} -g ${SERVICE_GROUP} -m -d /home/${SERVICE_USER} -s /sbin/nologin ${SERVICE_USER}
 
@@ -27,8 +33,10 @@ COPY --from=builder /src/front-end/package.json /usr/src/app/
 COPY --from=builder /src/front-end/yarn.lock /usr/src/app/
 
 RUN mkdir -p /opt/app-root/src/.npm \
-    && npm install -g yarn \
-    && chown -R myuser:mygroup /opt/app-root/src/.npm \
+    && npm config set strict-ssl false \
+    && npm install -g npm \
+    && npm install -g yarn@1.22.19 \
+    && chown -R myuser:mygroup /opt/app-root/src/ \
     && chown -R myuser /usr/src/
 
 USER myuser
@@ -37,4 +45,4 @@ RUN yarn install
 COPY --from=builder /src/front-end/ /usr/src/app
 
 # Start the app
-CMD ["/usr/local/bin/npm", "start"]
+CMD ["/usr/bin/npm", "start"]

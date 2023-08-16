@@ -18,19 +18,18 @@ spec:
     spec:
       containers:
         - name: catalogue-db
-          image: weaveworksdemos/catalogue-db:0.3.0
-          imagePullPolicy: IfNotPresent
+          image: quay.io/cbade_cs/openshift-demo:sock-shop-catalogue-db
+          imagePullPolicy: Always
           env:
-            - name: MYSQL_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb-creds
-                  key: username
-            - name: MYSQL_DATABASE
+            - name: MARIADB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mongodb-creds
                   key: password
+            - name: MARIADB_USER
+              value: root
+            - name: MARIADB_DATABASE
+              value: socksdb
           ports:
             - name: mysql
               containerPort: 3306

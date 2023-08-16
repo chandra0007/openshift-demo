@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: orders-db
-          image: mongo
+          image: mongo:4
           imagePullPolicy: IfNotPresent
           ports:
             - name: mongo
@@ -38,3 +38,4 @@ spec:
             claimName: orders-db-temp-pvc
       nodeSelector:
         node.openshift.io/os_id: rhcos
+        kubernetes.io/arch: amd64

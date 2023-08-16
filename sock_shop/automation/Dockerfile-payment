@@ -1,23 +1,22 @@
-FROM registry.access.redhat.com/ubi8/go-toolset:1.18.10-1.1682304657 as builder
+FROM registry.access.redhat.com/ubi9/go-toolset:latest as builder
 ENV sourcesdir /go/src/github.com/microservices-demo/payment/
 
 USER 0
 RUN mkdir -p /go/src/github.com/microservices-demo/ \
     && cd /go/src/github.com/microservices-demo/ \
-    && git clone https://github.com/microservices-demo/payment.git
+    && git clone https://github.com/microservices-demo/payment.git \
+    && go install github.com/FiloSottile/gvt@latest \
+    && cd /go/src/github.com/microservices-demo/payment && /opt/app-root/src/go/bin/gvt restore \
+    && go mod init github.com/microservices-demo/payment \
+    && go mod tidy
 
 # Decided to split the steps here to avoid rebuilding/cloning needlessly.
 
-RUN go install github.com/FiloSottile/gvt@latest \
-    && find / -iname gvt -type f \
-    && cd /go/src/github.com/microservices-demo/payment && /opt/app-root/src/go/bin/gvt restore \
-    && go mod init github.com/microservices-demo/payment \
-    && go mod tidy \
-    && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /app github.com/microservices-demo/payment/cmd/paymentsvc \
-    && find / -name user -type f
+RUN cd /go/src/github.com/microservices-demo/payment \
+    && CGO_ENABLED=0 GOOS=linux go build -mod=readonly -a -installsuffix cgo -o /app github.com/microservices-demo/payment/cmd/paymentsvc
 USER 1001
 
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.7-1107
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 ENV	SERVICE_USER=myuser \
 	SERVICE_UID=10001 \
@@ -25,7 +24,7 @@ ENV	SERVICE_USER=myuser \
 	SERVICE_GID=10001
 
 RUN microdnf update -y \
-    && microdnf install -y nc tzdata openssl curl ca-certificates fontconfig glibc-langpack-en gzip tar findutils shadow-utils \
+    && microdnf install -y nc tzdata openssl ca-certificates fontconfig glibc-langpack-en gzip tar findutils shadow-utils \
     && groupadd -r -g ${SERVICE_GID} ${SERVICE_GROUP} \
     && useradd -r -u ${SERVICE_UID} -g ${SERVICE_GROUP} -m -d /home/${SERVICE_USER} -s /sbin/nologin ${SERVICE_USER}
 
@@ -35,11 +34,12 @@ ENV MONGO_HOST user-db
 
 WORKDIR /
 EXPOSE 8080
-COPY --from=builder /go/src/github.com/microservices-demo/payment/payment /
+RUN	mkdir -p /payment
+COPY --from=builder /app /payment
 
-RUN	mkdir -p /payment && chmod +x /payment && \
-	chown -R ${SERVICE_USER}:${SERVICE_GROUP} /payment
+RUN	chmod +x /payment/app && \
+	chown -R ${SERVICE_USER}:${SERVICE_GROUP} /payment/app
 
 USER ${SERVICE_USER}
 
-CMD ["/app", "-port=8080"]
+CMD ["/payment/app", "-port=8080"]

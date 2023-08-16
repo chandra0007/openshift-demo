@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: carts-db
-          image: mongo
+          image: mongo:4
           imagePullPolicy: IfNotPresent
           ports:
             - name: mongo
@@ -38,3 +38,4 @@ spec:
             medium: Memory
       nodeSelector:
         node.openshift.io/os_id: rhcos
+        kubernetes.io/arch: amd64

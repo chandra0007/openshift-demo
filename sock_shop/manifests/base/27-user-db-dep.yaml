@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
         - name: user-db
-          image: weaveworksdemos/user-db:0.3.0
-          imagePullPolicy: IfNotPresent
+          image: quay.io/pbastide_rh/openshift-demo:user-db-amd64
+          imagePullPolicy: Always
           ports:
             - name: mongo
               containerPort: 27017
@@ -38,3 +38,4 @@ spec:
             claimName: user-db-temp-pvc
       nodeSelector:
         node.openshift.io/os_id: rhcos
+        kubernetes.io/arch: amd64

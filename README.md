@@ -10,7 +10,8 @@ The purpose of this repository is to provide a set of simple proof-of-concept co
 1. [Ghost](ghost/) uses kustomize to deploy a working ghost blogging site.
 1. [compliance/openscap-scanner-on-mac](compliance/openscap-scanner-on-mac) how to run the compliance oscap tool on Mac.
 1. [job cronjob](job_cronjob) shows advanced job and cronjob definitions.
-1. [Sock Shop](sock_shop) a multi architecture compute demonstration using [Sock Shop](https://github.com/microservices-demo) from WeaveWorks.
+1. [Sock Shop](sock_shop) a multi architecture compute demonstration using [Sock Shop](https://github.com/microservices-demo) from WeaveWorks recompiled for Java11, UBI9 and Manifest Lists.
+1. [rhcos powervs](rhcos/powervs-worker) shows how to ignite a system with RHCOS on PowerVS.
 1. [Mutating Webhook Demo](mutating) adds annotations and nodeSelector
 
 # Is this a Red Hat or IBM supported solution?

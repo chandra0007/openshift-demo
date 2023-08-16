@@ -43,7 +43,9 @@ resources:
   - 27-user-db-temp-pvc.yaml
   - 27-user-db-dep.yaml
   - 28-user-db-svc.yaml
+  - 29-route-front-end.yaml
 secretGenerator:
   - name: mongodb-creds
+    namespace: sock-shop
     envs:
-      - .env.secret
+      - env.secret

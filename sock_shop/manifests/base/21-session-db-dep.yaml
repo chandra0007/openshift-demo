@@ -30,5 +30,12 @@ spec:
               drop:
                 - all
             readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /data
+              name: sesion-db-vol
+      volumes:
+        - name: sesion-db-vol
+          emptyDir:
+            medium: Memory
       nodeSelector:
         node.openshift.io/os_id: rhcos
