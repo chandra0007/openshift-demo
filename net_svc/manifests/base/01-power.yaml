@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: power
+  labels:
+    name: power
+  namespace: net-debug
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: power
+  template:
+    metadata:
+      labels:
+        name: power
+    spec:
+      containers:
+        - name: power
+          image: registry.access.redhat.com/ubi9/httpd-24:1-273
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: power
+              containerPort: 8080
+          securityContext:
+            readOnlyRootFilesystem: false
+      nodeSelector:
+        node.openshift.io/os_id: rhcos
+        kubernetes.io/arch: ppc64le

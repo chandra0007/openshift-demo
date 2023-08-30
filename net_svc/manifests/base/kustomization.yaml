@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: net-debug
+  namespace: net-debug
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+sortOptions:
+  order: fifo
+
+resources:
+  - 00-ns.yaml
+  - 01-power.yaml
+  - 02-power-svc.yaml
+  - 03-intel.yaml
+  - 04-intel-svc.yaml

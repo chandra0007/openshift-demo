@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: intel
+  labels:
+    name: intel
+  namespace: net-debug
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: intel
+  template:
+    metadata:
+      labels:
+        name: intel
+    spec:
+      containers:
+        - name: intel
+          image: registry.redhat.io/ubi9/httpd-24
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: intel
+              containerPort: 8080
+          securityContext:
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - all
+            readOnlyRootFilesystem: false
+      nodeSelector:
+        node.openshift.io/os_id: rhcos
+        kubernetes.io/arch: amd64
