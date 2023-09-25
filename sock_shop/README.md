@@ -1,3 +1,5 @@
+Please go to https://github.com/ocp-power-demos/sock-shop-demo for the latest code.
+
 ### Purpose
 
 The purpose of this application is to use a reference microservices demo to show a real-life multiarchitecture compute.
